@@ -195,73 +195,80 @@ namespace BT1
 
             Thread timer11 = new Thread(() =>
             {
-                try
-                {
-                    StreamWriter sw = new StreamWriter("D:\\Test.txt", true);
-                    string s = "";
-                    do
-                    {
-                        Console.Write("s: ");
-                        s = Convert.ToString(Console.ReadLine());
-                        sw.WriteLine(s);
-                        sw.Close();
-                        isRun1 = true;
-                        Thread.Sleep(5);
-
-
-                    } while (s != "thoat");
-
-                    Console.WriteLine("End task 1");
-
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Exception: " + e.Message);
-                }
-                finally
-                {
-                    Console.WriteLine("Executing finally block.");
-                }
-            });
-
-            Thread timer22 = new Thread(() =>
-            {
-                String line;
-                if(isRun1)
+                string s = "";
+                do
                 {
                     try
                     {
-                        do
+                        if (!isRun1)
                         {
-                            StreamReader sr = new StreamReader("D:\\Test.txt");
+                            if (s != "thoat")
+                            {
+                                StreamWriter sw = new StreamWriter("D:\\Test.txt", false);
+                                Console.Write("s: ");
+                                s = Console.ReadLine();
+                                sw.WriteLine(s);
+                                isRun1 = true;
+                                sw.Close();
+                                Thread.Sleep(5);
+                            }
 
-                            line = sr.ReadLine();
-                            Console.WriteLine(line);
-                            Console.WriteLine(ReverseString(line));
-                            //close the file
-                            sr.Close();
-                            isRun1 = false;
-                        } while (line != "thoat");
-                            Console.WriteLine("End task 2");
+                        }
                     }
                     catch (Exception e)
                     {
                         Console.WriteLine("Exception: " + e.Message);
                     }
-                    finally
-                    {
-                        Console.WriteLine("Executing finally block.");
-                    }
-                }
+
+                } while (s != "thoat");
+                Console.WriteLine("end time 1");
             });
+
+            Thread timer22 = new Thread(() =>
+            {
+                String line = "";
+                do
+                {
+                    try
+                    {
+                        if (isRun1)
+                        {
+                            if (line != "thoat")
+                            {
+                                Thread.Sleep(10);
+
+                                StreamReader sr = new StreamReader("D:\\Test.txt");
+                                line = sr.ReadLine();
+                                Console.WriteLine(line);
+                                Console.WriteLine("read file:" + ReverseString(line));
+                                isRun1 = false;
+                                sr.Close();
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Exception: " + e.Message);
+                    }
+
+                } while (line != "thoat");
+                Console.WriteLine("end time 2");
+
+            });
+
+
 
             timer11.Start();
             timer22.Start();
 
             timer11.Join();
             timer22.Join();
+            #endregion
+
+            #region Bai1
 
             #endregion
+
             Console.ReadKey();
         }
 
@@ -311,7 +318,7 @@ namespace BT1
             // Đếm số lượng từ trong mảng
             return words.Length;
         }
-    
 
-}
+
+    }
 }
